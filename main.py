@@ -15,6 +15,13 @@ class MyServer(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(bytes(page_content, "utf-8"))
 
+    def do_POST(self):
+        content_lenght = int(self.headers["Content-Length"])
+        body = self.rfile.read(content_lenght)
+        print(body)
+        self.send_response(200)
+        self.end_headers()
+
 
 if __name__ == "__main__":
     webServer = HTTPServer((hostName, serverPort), MyServer)
