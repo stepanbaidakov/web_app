@@ -8,7 +8,7 @@ serverPort = 8080
 class MyServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        with open("contacts.html", "r", encoding="utf-8") as file:
+        with open("templates/contacts.html", "r", encoding="utf-8") as file:
             page_content = file.read()
             self.send_response(200)
             self.send_header("Content-type", "text/html")
@@ -17,10 +17,13 @@ class MyServer(BaseHTTPRequestHandler):
 
     def do_POST(self):
         content_lenght = int(self.headers["Content-Length"])
-        body = self.rfile.read(content_lenght)
-        print(body)
+        post_data = self.rfile.read(content_lenght)
+        data_string = post_data.decode('utf-8')
         self.send_response(200)
+        self.send_header('Content-type', 'text/html')
         self.end_headers()
+        response = f"Получены данные: {data_string}"
+        self.wfile.write(response.encode('utf-8'))
 
 
 if __name__ == "__main__":
